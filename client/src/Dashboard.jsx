@@ -4,6 +4,7 @@ export default function Dashboard() {
     // Carousel state
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
+    
 
     // Doctor data
     const doctors = [
@@ -50,6 +51,9 @@ export default function Dashboard() {
             image:"https://img.freepik.com/premium-photo/indian-female-doctor-wear-headset-face-headshot-telemedicine-india_203461-1162.jpg?w=2000"
         }
     ];
+
+    
+
 
     // Auto-scroll effect
     useEffect(() => {
@@ -244,7 +248,7 @@ export default function Dashboard() {
                                     transform: `translateX(-${currentSlide * (100 / 3)}%)`
                                 }}
                             >
-                                {doctors.map((doctor, index) => (
+                                {[...doctors,...doctors].map((doctor, index) => (
                                     <div
                                         key={index}
                                         className="min-w-[calc(100%-2rem)] md:min-w-[calc(50%-1rem)] lg:min-w-[calc(33.333%-1.33rem)] hover-lift bg-gradient-to-br from-green-100 via-green-50 to-white rounded-3xl p-8 shadow-lg border border-green-200 group"
