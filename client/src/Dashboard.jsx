@@ -1,6 +1,75 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 export default function Dashboard() {
+    // Carousel state
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
+
+    // Doctor data
+    const doctors = [
+        {
+            name: "Dr. Karthick N",
+            credentials: "M.B.B.S, Medical Officer",
+            location: "Dharmapur, Tamil Nadu",
+            patients: "113,100+",
+            image: "https://img.freepik.com/premium-photo/indian-doctor-smiling-face_1197144-1012.jpg"
+        },
+        {
+            name: "Dr. K Suresh T",
+            credentials: "M.B.B.S, Medical Officer",
+            location: "Kanniyakumari, Tamil Nadu",
+            patients: "100,500+",
+            image:"https://i1.sndcdn.com/artworks-000562525653-v1wh6h-t500x500.jpg"
+        },
+        {
+            name: "Dr. B. Ahmed Paizal",
+            credentials: "M.B.B.S, General Physician",
+            location: "Dindigul, Tamil Nadu",
+            patients: "93,000+",
+            image:"https://static.vecteezy.com/system/resources/previews/053/323/058/non_2x/portrait-of-indian-doctor-with-stethoscope-around-his-neck-smiling-over-blue-background-photo.jpg"
+        },
+        {
+            name: "Dr. Priya Sharma",
+            credentials: "M.D, Pediatrician",
+            location: "Chennai, Tamil Nadu",
+            patients: "87,500+",
+            image:"https://thumbs.dreamstime.com/b/happy-indian-female-cardiologist-white-coat-posing-workplace-general-practitioner-pose-exude-confidence-professionalism-355502336.jpg"
+        },
+        {
+            name: "Dr. Rajesh Kumar",
+            credentials: "M.S, Orthopedic Surgeon",
+            location: "Coimbatore, Tamil Nadu",
+            patients: "95,200+",
+            image:"https://tse3.mm.bing.net/th/id/OIP.LSd9wYUuxJCh79C9tvt-igHaGn?cb=ucfimg2&pid=ImgDet&ucfimg=1&w=206&h=184&c=7&dpr=1.3&o=7&rm=3"
+        },
+        {
+            name: "Dr. Meena Iyer",
+            credentials: "M.D, Dermatologist",
+            location: "Madurai, Tamil Nadu",
+            patients: "78,900+",
+            image:"https://img.freepik.com/premium-photo/indian-female-doctor-wear-headset-face-headshot-telemedicine-india_203461-1162.jpg?w=2000"
+        }
+    ];
+
+    // Auto-scroll effect
+    useEffect(() => {
+        if (!isPaused) {
+            const interval = setInterval(() => {
+                setCurrentSlide((prev) => (prev + 1) % doctors.length);
+            }, 4000); // Change slide every 4 seconds
+
+            return () => clearInterval(interval);
+        }
+    }, [isPaused, doctors.length]);
+
+    const nextSlide = () => {
+        setCurrentSlide((prev) => (prev + 1) % doctors.length);
+    };
+
+    const prevSlide = () => {
+        setCurrentSlide((prev) => (prev - 1 + doctors.length) % doctors.length);
+    };
+
     return (
         <div className="font-sans text-green-900 relative">
             {/* Navbar */}
@@ -154,6 +223,77 @@ export default function Dashboard() {
                 </div>
             </section>
 
+            {/* Our Doctors Section */}
+            <section className="bg-gradient-to-b from-green-50 to-white py-20 px-10">
+                <div className="max-w-7xl mx-auto">
+                    <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-green-800 to-green-600 bg-clip-text text-transparent animate-fade-in">
+                        Our Doctors
+                    </h2>
+
+                    {/* Carousel Container */}
+                    <div
+                        className="relative"
+                        onMouseEnter={() => setIsPaused(true)}
+                        onMouseLeave={() => setIsPaused(false)}
+                    >
+                        {/* Cards Container */}
+                        <div className="overflow-hidden">
+                            <div
+                                className="flex transition-transform duration-500 ease-in-out gap-8"
+                                style={{
+                                    transform: `translateX(-${currentSlide * (100 / 3)}%)`
+                                }}
+                            >
+                                {doctors.map((doctor, index) => (
+                                    <div
+                                        key={index}
+                                        className="min-w-[calc(100%-2rem)] md:min-w-[calc(50%-1rem)] lg:min-w-[calc(33.333%-1.33rem)] hover-lift bg-gradient-to-br from-green-100 via-green-50 to-white rounded-3xl p-8 shadow-lg border border-green-200 group"
+                                    >
+                                        <div className="flex items-start gap-4 mb-4">
+                                            {/* Empty placeholder for doctor image */}
+                                            <div className="w-20 h-20 rounded-full overflow-hidden   flex items-center justify-center">
+                                                <img src={doctor.image} className="w-full h-full object-cover" />
+                                            </div>
+                                            <div className="flex-1">
+                                                <h3 className="text-xl font-bold text-green-900 mb-1">{doctor.name}</h3>
+                                                <p className="text-sm text-gray-600 mb-1">{doctor.credentials}</p>
+                                                <p className="text-sm text-gray-500">{doctor.location}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-2 text-green-700 font-semibold bg-white/70 rounded-full px-4 py-2 shadow-sm">
+                                            <span className="text-yellow-500">⭐</span>
+                                            <span className="text-sm">{doctor.patients} Patients served</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Navigation Buttons */}
+                        <div className="flex justify-center gap-4 mt-8">
+                            <button
+                                onClick={prevSlide}
+                                className="w-12 h-12 rounded-full bg-white shadow-lg hover:shadow-xl border-2 border-green-200 hover:border-green-400 flex items-center justify-center text-green-700 hover:text-green-900 transition-all hover:scale-110"
+                                aria-label="Previous"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                                </svg>
+                            </button>
+                            <button
+                                onClick={nextSlide}
+                                className="w-12 h-12 rounded-full bg-white shadow-lg hover:shadow-xl border-2 border-green-200 hover:border-green-400 flex items-center justify-center text-green-700 hover:text-green-900 transition-all hover:scale-110"
+                                aria-label="Next"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
 
             {/* Testimonial */}
             <section className="bg-gradient-to-r from-green-600 via-green-500 to-green-600 animate-gradient text-white py-20 text-center relative overflow-hidden">
@@ -186,6 +326,8 @@ export default function Dashboard() {
                     </button>
                 </div>
             </section>
+
+
 
             {/* Footer */}
             <footer className="bg-gradient-to-b from-green-100 to-green-200 py-10 text-center text-green-800">
